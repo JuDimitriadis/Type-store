@@ -1,13 +1,20 @@
 import React from 'react';
 import './Login.css';
 import {Container, Paper, Box, TextField, Button, Alert, Typography} from '@mui/material';
+import userEvent from '@testing-library/user-event';
+
+const headers = {'Content-Type':'application/json',
+                    'Access-Control-Allow-Origin':'*',
+                    'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS'}
 
   type MyState = {
     username: string,
     password: string,
-    alert: string
+    alert: {
+        severity:any,
+        errorMsg:string,
+    }
   };
-  
   
   export default class Login extends React.Component<any,MyState> {
     constructor(props: any, state: MyState) {
@@ -15,11 +22,12 @@ import {Container, Paper, Box, TextField, Button, Alert, Typography} from '@mui/
         this.state = state;
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
 
     }
   
 
-    handleChange (evt: { target: { name: string; value: string; }; }) {
+    handleChange (evt: { target: { name: string; value: string; }}) {
         this.setState(
             //adding this.state here will destructure the state object, 
             //then I am able to add/modify more objects to the destructured object. 
@@ -28,8 +36,71 @@ import {Container, Paper, Box, TextField, Button, Alert, Typography} from '@mui/
                 [evt.target.name]: evt.target.value,
             }
         )
-    } 
-
+    };
+    
+    async handleClick(evt:{preventDefault:Function}) {
+        evt.preventDefault();
+        if (this.state.username && this.state.password) {
+            const response = await fetch('https://fakestoreapi.com/auth/login',{
+                method:'POST',
+                headers: headers,
+                body:JSON.stringify({
+                    username: this.state.username,
+                    password: this.state.password
+                })
+            });
+            if (response.ok) {
+                const parse = await response.json();
+                if (parse.token){
+                    // set cookie
+                    // setCookie('Type-Store', {user: this.state.username, auth: true}, { path: '/',maxAge: 1000 * 60 * 60 * 24, secure: true  });
+                    return 
+                } else {
+                    // All success call are supposed to come back with a token property, if this do not happen, 
+                    // we have an error, or something change on the API side, developers should be notified. 
+                    this.setState( { ...this.state,
+                        alert: {
+                            severity:"error",
+                            errorMsg:"Ops! Something went wrong, please check your data and try again"
+                        }
+                    })
+                    //In a real application, I would be logged it in a database, and developers notified by e-mail.
+                    console.log("response", response, "parse", parse);
+                    return 
+                } 
+            } else {
+            if (response.status === 401) {
+                //401 Unauthorized response status code indicates that the client request has not been completed because it lacks valid authentication credentials for the requested resource
+                //Wrong username and/or password
+                this.setState( { ...this.state,
+                    alert: {
+                        severity:"warning",
+                        errorMsg:"Ops! Wrong username and/or password, please check your data and try again"
+                    }
+                })
+                return
+            } else {
+                //All others api errors (400.., 500.., ...)
+                this.setState( { ...this.state,
+                    alert: {
+                        severity:"error",
+                        errorMsg:"Ops! Something went wrong, please try again in a few seconds"
+                    }
+                })
+                return
+            }
+        } } else {
+            //Blank field validation
+            this.setState( { ...this.state,
+                alert: {
+                    severity:"warning",
+                    errorMsg:"Please fill out all fields before continue"
+                }
+                
+            })
+        }
+    }
+  
     render() {
         return (
             <Container sx={{display: "flex", justifyContent: "center", alignContent: "flex-start", height: "100vh", flexWrap: "wrap", padding: "5%"}}>
@@ -39,8 +110,8 @@ import {Container, Paper, Box, TextField, Button, Alert, Typography} from '@mui/
                     <Box component="form" sx={{m: 1, width: '100%', height: "100%", display: "flex", flexDirection: "column", flexWrap: "wrap", alignContent: "center"}} autoComplete="off">
                         <TextField required id="outlined-required" label="Username" type="username" name="username" sx={{m:1}} onChange={this.handleChange}/>
                         <TextField required id="outlined-password-input" label="Password" type="password" name="password" sx={{m:1}} onChange={this.handleChange}/>
-                        <Button variant="contained" size="small" sx={{m:1}}>Login</Button>
-                        {/* {this.state.alert && <Alert severity={this.state.alert}>{this.state.error}</Alert>}         */}
+                        <Button variant="contained" size="small" sx={{m:1}} onClick={this.handleClick}>Login</Button>
+                        {this.state.alert ? <Alert severity={this.state.alert.severity}>{this.state.alert.errorMsg}</Alert>: <></>}        
                     </Box>
                 </Paper>              
             </Container>

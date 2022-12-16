@@ -7,8 +7,13 @@ interface Error {
   message: string,
 };
 
-function App() {
+interface MyProps {
+  removeCookie: Function
+}
+
+function App(props: MyProps) {
   const [apiError, setApiError] = useState<Error>({error: false, message: ""})
+  console.log("MyProps", props)
 
   //Fetching data from the "fakestoreapi"
   //This function will be called inside the useEffect hook, every time the user load the page 

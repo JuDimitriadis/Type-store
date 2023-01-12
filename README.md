@@ -1,4 +1,4 @@
-# My Fake Store
+# Type-Store
 
 Project under development using Create-React-App, Typescript and Material UI.
 

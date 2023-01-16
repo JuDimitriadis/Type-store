@@ -8,7 +8,7 @@ function Start() {
     const [cookies, setCookie, removeCookie] = useCookies(["TypeStore"]);
    
     return (<>
-        {cookies.TypeStore ? <App removeCookie={removeCookie}></App> : <Login setCookie={setCookie}></Login>}
+        {cookies.TypeStore ? <App /* removeCookie={removeCookie}*/></App> : <Login setCookie={setCookie}></Login>}
     \</>)
    
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import Start from './Start';
 import './index.css';
-import App from './App';
-import Login from './Login';
 import reportWebVitals from './reportWebVitals';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from "@mui/material";
+
 
 const theme = createTheme({
   palette: {
@@ -37,8 +37,7 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-        {/* <App/> */}
-        <Login></Login>
+        <Start></Start>
     </ThemeProvider>
   </React.StrictMode>
 );

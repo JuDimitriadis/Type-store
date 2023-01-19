@@ -123,8 +123,8 @@ export type MyProps = {
                 <Paper elevation={10} sx={{ width: {xs: "90vw", sm: "70vw", md: "50vw"}, p:2, textAlign: "center", height: "fit-content"  }}>
                     <Typography variant="h3" sx={{fontWeight: "bold"}}>Type-Store</Typography>
                     <Box component="form" sx={{m: 1, width: '100%', height: "100%", display: "flex", flexDirection: "column", flexWrap: "wrap", alignContent: "center"}} autoComplete="off">
-                        <TextField required id="outlined-required" label="Username" type="username" name="username" sx={{m:1}} onChange={this.handleChange}/>
-                        <TextField required id="outlined-password-input" label="Password" type="password" name="password" sx={{m:1}} onChange={this.handleChange} data-testid="password"/>
+                        <TextField required id="outlined-required" placeholder="Username" type="username" name="username" sx={{m:1}} onChange={this.handleChange}/>
+                        <TextField required id="outlined-password-input" placeholder="Password" type="password" name="password" sx={{m:1}} onChange={this.handleChange} data-testid="password"/>
                         <Button variant="contained" size="small" sx={{m:1}} onClick={this.handleClick}>Login</Button>
                         {this.state.alert ? <Alert severity={this.state.alert.severity}>{this.state.alert.errorMsg}</Alert>: <></>}        
                     </Box>

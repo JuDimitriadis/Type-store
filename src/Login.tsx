@@ -1,13 +1,13 @@
 import React from 'react';
 import './Login.css';
 import {Container, Paper, Box, TextField, Button, Alert, Typography} from '@mui/material';
-import userEvent from '@testing-library/user-event';
+
 
 const headers = {'Content-Type':'application/json',
                     'Access-Control-Allow-Origin':'*',
                     'Access-Control-Allow-Methods':'POST,PATCH,OPTIONS'}
 
-  type MyProps = {
+export type MyProps = {
     setCookie: Function
   }
   
@@ -33,7 +33,7 @@ const headers = {'Content-Type':'application/json',
 
     handleChange (evt: { target: { name: string; value: string; }}) {
         this.setState(
-            //adding this.state here will destructure the state object, 
+            //adding ...this.state here will destructure the state object, 
             //then I am able to add/modify more objects to the destructured object. 
             //In order to take all of it and assign to the current state using this.setState
             { ...this.state,
@@ -76,7 +76,7 @@ const headers = {'Content-Type':'application/json',
                             errorMsg:"Ops! Something went wrong, please check your data and try again"
                         }
                     })
-                    //In a real application, I would be logged it in a database, and developers notified by e-mail.
+                    //In a real application, I would log it in a database, and developers would be notified by e-mail.
                     console.log("response", response, "parse", parse);
                     return 
                 }
@@ -115,23 +115,6 @@ const headers = {'Content-Type':'application/json',
         }
 
     }
-
-
-
-                    // const setCookie = await managingCookies(true, false, this.state.username)
-                    // if(setCookie.auth){
-                    //     // eslint-disable-next-line no-restricted-globals
-                    //     location.reload();
-                    //     return
-                    // } else {
-                    //     this.setState( { ...this.state,
-                    //         alert: {
-                    //             severity:"error",
-                    //             errorMsg:"Ops! Something went wrong, please try again in a few seconds"
-                    //         }
-                    //     })
-                    //     // console.log("setCookie Error", setCookie)
-      
   
     render() {
         return (
@@ -140,8 +123,8 @@ const headers = {'Content-Type':'application/json',
                 <Paper elevation={10} sx={{ width: {xs: "90vw", sm: "70vw", md: "50vw"}, p:2, textAlign: "center", height: "fit-content"  }}>
                     <Typography variant="h3" sx={{fontWeight: "bold"}}>Type-Store</Typography>
                     <Box component="form" sx={{m: 1, width: '100%', height: "100%", display: "flex", flexDirection: "column", flexWrap: "wrap", alignContent: "center"}} autoComplete="off">
-                        <TextField required id="outlined-required" label="Username" type="username" name="username" sx={{m:1}} onChange={this.handleChange}/>
-                        <TextField required id="outlined-password-input" label="Password" type="password" name="password" sx={{m:1}} onChange={this.handleChange}/>
+                        <TextField required id="outlined-required" placeholder="Username" type="username" name="username" sx={{m:1}} onChange={this.handleChange}/>
+                        <TextField required id="outlined-password-input" placeholder="Password" type="password" name="password" sx={{m:1}} onChange={this.handleChange} data-testid="password"/>
                         <Button variant="contained" size="small" sx={{m:1}} onClick={this.handleClick}>Login</Button>
                         {this.state.alert ? <Alert severity={this.state.alert.severity}>{this.state.alert.errorMsg}</Alert>: <></>}        
                     </Box>
